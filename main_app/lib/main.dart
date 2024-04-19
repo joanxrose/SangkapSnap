@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main_app/components/customNav.dart';
 import 'package:main_app/themes/customTheme.dart';
 
 void main() {
@@ -14,14 +15,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: appTitle,
-        theme: customTheme,
-        home: const Scaffold(
-          body: Center(
-            child: Text(
-              "This is the Sangkap Snap app!",
-            ),
-          ),
-        ));
+      title: appTitle,
+      theme: customTheme,
+      home: CustomNav(),
+    );
   }
 }

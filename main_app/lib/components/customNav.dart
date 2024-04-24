@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:main_app/screens/cameraPage.dart';
 import 'package:main_app/screens/homePage.dart';
 import 'package:main_app/screens/searchPage.dart';
@@ -36,9 +37,47 @@ class _CustomNavState extends State<CustomNav> {
                 side: const BorderSide(width: 10, color: AppColors.mainWhite),
                 borderRadius: BorderRadius.circular(100)),
             onPressed: () {
-              setState(() {
+              /* setState(() {
                 _pageIndex = 1;
-              });
+              }); */
+
+              showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      color: AppColors.mainWhite,
+                      height: 160,
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 20, right: 20),
+                        child: Center(
+                            child: ListView(
+                          children: [
+                            ListTile(
+                              leading: const Icon(
+                                Icons.collections,
+                                color: AppColors.mainGreen,
+                              ),
+                              title: const Text('Choose image from Gallery'),
+                              onTap: () {
+                                print("Choose from gallery");
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(
+                                Icons.camera_alt,
+                                color: AppColors.mainGreen,
+                              ),
+                              title: const Text('Take photo'),
+                              onTap: () {
+                                print("Take photo");
+                              },
+                            ),
+                          ],
+                        )),
+                      ),
+                    );
+                  });
             },
             child: const Icon(
               Icons.camera_alt,

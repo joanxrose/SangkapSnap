@@ -41,11 +41,11 @@ class _CameraPageState extends State<CameraPage> {
 
   // Load model
   Future loadModel() async {
-    String pathObjectDetectionModelYolov5 = "assets/models/yolov5s.torchscript";
-    String labelPath = "assets/models/labels_coco.txt";
+    String pathObjectDetectionModelYolov5 = "assets/models/best.torchscript";
+    String labelPath = "assets/models/classes.txt";
     try {
       _objectModel = await PytorchLite.loadObjectDetectionModel(
-          pathObjectDetectionModelYolov5, 80, 640, 640,
+          pathObjectDetectionModelYolov5, 11, 640, 640,
           labelPath: labelPath,
           objectDetectionModelType: ObjectDetectionModelType.yolov5);
     } catch (e) {
@@ -56,7 +56,7 @@ class _CameraPageState extends State<CameraPage> {
   Future runObjectDetection() async {
     objDetect = await _objectModel.getImagePrediction(
         await (widget.selectedImage!).readAsBytes(),
-        minimumScore: 0.1,
+        minimumScore: 0.4,
         iOUThreshold: 0.3);
 
     for (var element in objDetect) {

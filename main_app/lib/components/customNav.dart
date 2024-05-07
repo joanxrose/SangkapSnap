@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:main_app/screens/displayImagePage.dart';
+import 'package:main_app/screens/detectIngredients.dart';
 import 'package:main_app/screens/homePage.dart';
 import 'package:main_app/screens/searchPage.dart';
 import 'package:main_app/themes/colorConstants.dart';

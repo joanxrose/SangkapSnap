@@ -67,6 +67,7 @@ flutter:
     - assets/models/yolov5s.torchscript
     - assets/models/labels_coco.txt
     - assets/models/best.torchscript
+    - assets/models/best_02.torchscript
     - assets/models/classes.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see

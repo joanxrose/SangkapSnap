@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:main_app/components/customButton.dart';
+import 'package:main_app/screens/recommendedPage.dart';
 import 'package:main_app/themes/colorConstants.dart';
 import 'package:pytorch_lite/lib.dart';
 import 'package:pytorch_lite/pytorch_lite.dart';
@@ -22,7 +23,7 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   File? _image;
 
-  late ModelObjectDetection _objectModel;
+  ModelObjectDetection? _objectModel;
   List<ResultObjectDetection?> objDetect = [];
 
   // Keeps track of the app state (loading)
@@ -55,7 +56,7 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Future runObjectDetection() async {
-    objDetect = await _objectModel.getImagePrediction(
+    objDetect = await _objectModel!.getImagePrediction(
         await (widget.selectedImage!).readAsBytes(),
         minimumScore: 0.5,
         iOUThreshold: 0.3);
@@ -206,7 +207,7 @@ class _CameraPageState extends State<CameraPage> {
                                     enabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                             color: AppColors.mainGreen,
-                                            width: 1.5),
+                                            width: 1),
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     focusedBorder: OutlineInputBorder(
@@ -250,7 +251,13 @@ class _CameraPageState extends State<CameraPage> {
                           ? _hasDetected
                               ? CustomButton(
                                   onPressed: () {
-                                    print("Recommend recipes");
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => RecommendedPage(
+                                              detectedList:
+                                                  detectedOjectsList)),
+                                    );
                                   },
                                   text: "Recommend Recipes",
                                   backgroundColor: AppColors.mainGreen,

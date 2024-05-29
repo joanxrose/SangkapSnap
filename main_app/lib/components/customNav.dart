@@ -20,7 +20,7 @@ class _CustomNavState extends State<CustomNav> {
   int _pageIndex = 0;
 
   final List<Widget> _pages = [
-    const HomePage(),
+    HomePage(),
     const SearchPage(),
   ];
 

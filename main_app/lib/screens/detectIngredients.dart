@@ -173,8 +173,8 @@ class _CameraPageState extends State<CameraPage> {
                                     children: [
                                       IconButton(
                                         icon: const Icon(
-                                          Icons.remove_circle,
-                                          color: AppColors.mainGreen,
+                                          Icons.delete,
+                                          color: AppColors.gray,
                                         ),
                                         onPressed: () {
                                           detectedOjectsList.remove(
@@ -241,6 +241,10 @@ class _CameraPageState extends State<CameraPage> {
                         )
                       ],
                     ),
+
+              const SizedBox(
+                height: 20,
+              ),
 
               // Only Go Back button will be visible when no image is selected
               (widget.selectedImage != null)

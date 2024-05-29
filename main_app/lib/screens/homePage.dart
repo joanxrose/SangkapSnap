@@ -1,49 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:main_app/components/customCard.dart';
+import 'package:main_app/screens/searchPage.dart';
 import 'package:main_app/themes/colorConstants.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  // TODO: Edit spacing between texts
-  final header = const Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        "Welcome to",
-        style: TextStyle(fontSize: 34, fontWeight: FontWeight.w600),
-      ),
-      Text(
-        "SangkapSnap!",
-        style: TextStyle(
-            fontSize: 34,
-            fontWeight: FontWeight.w800,
-            color: AppColors.mainGreen),
-      ),
-    ],
-  );
+  static const routename = '/home';
 
-  // Search
-  // TODO: FAB stay in place when keyboard is active
-  final searchField = TextField(
-    style: const TextStyle(color: AppColors.gray),
-    decoration: InputDecoration(
-      hintText: "Search recipes or ingredients",
-      border: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.mainGreen, width: 1.5),
-        borderRadius: BorderRadius.circular(50),
+  // Header
+  final header = RichText(
+    text: const TextSpan(
+      style: TextStyle(
+        height: 1.3,
+        fontSize: 34,
+        fontFamily: "PPPangramSans",
+        color: Colors.black,
       ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.mainGreen, width: 1.5),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.mainGreen, width: 2),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      prefixIcon: const Icon(Icons.search, color: AppColors.mainGreen),
-      labelStyle: const TextStyle(color: AppColors.mainGreen),
+      children: [
+        TextSpan(
+          text: "Welcome to\n",
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        TextSpan(
+          text: "SangkapSnap",
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+            color: AppColors.mainGreen,
+          ),
+        ),
+        TextSpan(
+          text: "!",
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ],
     ),
-    onTap: () {},
   );
 
   // Available Recipes Text
@@ -61,83 +54,6 @@ class HomePage extends StatelessWidget {
     ],
   );
 
-  // Card
-  final card = Container(
-    decoration: BoxDecoration(
-      boxShadow: [
-        BoxShadow(
-          color: AppColors.gray.withOpacity(0.1),
-          blurRadius: 8,
-          offset: const Offset(
-            0, // horizontally
-            8.0, // vertically
-          ),
-        )
-      ],
-    ),
-    child: Card(
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      color: AppColors.mainWhite,
-      child: InkWell(
-        onTap: () {
-          debugPrint("Clicked card!");
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Container(
-                  height: 180,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        "https://takestwoeggs.com/wp-content/uploads/2024/04/Filipino-Chicken-Adobo-adobong-manok-4-500x500.jpg",
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16)
-                  .copyWith(bottom: 20),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Adobong Manok",
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Chip(
-                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20))),
-                      side: BorderSide.none,
-                      backgroundColor: AppColors.mainGreen,
-                      label: Text(
-                        "217 kcal",
-                        style: TextStyle(
-                            color: AppColors.mainWhite,
-                            fontWeight: FontWeight.w600),
-                      ))
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,7 +62,7 @@ class HomePage extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30)
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 30)
                 .copyWith(bottom: 120),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -154,9 +70,46 @@ class HomePage extends StatelessWidget {
               children: [
                 header,
                 const SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
-                searchField,
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            SearchPage(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(1.0, 0.0),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  child: IgnorePointer(
+                    child: TextField(
+                      style: const TextStyle(color: AppColors.gray),
+                      cursorColor: AppColors.mainGreen,
+                      decoration: InputDecoration(
+                        hintText: "Search recipes or ingredients",
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: AppColors.mainGreen, width: 1.5),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        prefixIcon: const Icon(Icons.search,
+                            color: AppColors.mainGreen),
+                        labelStyle: const TextStyle(color: AppColors.mainGreen),
+                      ),
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 36,
                 ),
@@ -164,11 +117,15 @@ class HomePage extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-                card,
+                const CustomCard(),
                 const SizedBox(
                   height: 16,
                 ),
-                card,
+                const CustomCard(),
+                const SizedBox(
+                  height: 16,
+                ),
+                const CustomCard(),
               ],
             ),
           ),

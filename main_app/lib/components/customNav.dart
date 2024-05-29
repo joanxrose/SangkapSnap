@@ -21,7 +21,7 @@ class _CustomNavState extends State<CustomNav> {
 
   final List<Widget> _pages = [
     HomePage(),
-    const SearchPage(),
+    SearchPage(),
   ];
 
   // Image picker
@@ -54,6 +54,7 @@ class _CustomNavState extends State<CustomNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBody: true,
       body: _pages[_pageIndex],
       floatingActionButton: SizedBox(

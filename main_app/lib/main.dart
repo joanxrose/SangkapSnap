@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:main_app/components/customNav.dart';
+import 'package:main_app/screens/homePage.dart';
+import 'package:main_app/screens/searchPage.dart';
 import 'package:main_app/themes/customTheme.dart';
 
 void main() {
@@ -17,7 +19,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: appTitle,
       theme: customTheme,
-      home: CustomNav(),
+      home: const CustomNav(),
+      routes: {
+        SearchPage.routename: (context) => SearchPage(),
+        HomePage.routename: (context) => HomePage(),
+      },
     );
   }
 }

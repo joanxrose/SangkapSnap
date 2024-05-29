@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main_app/screens/recipePage.dart';
 import 'package:main_app/themes/colorConstants.dart';
 
 // TODO: Change image when image from the internet cannot be fetched
@@ -27,6 +28,23 @@ class CustomCard extends StatelessWidget {
         child: InkWell(
           onTap: () {
             debugPrint("Clicked card!");
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const RecipePage(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(1.0, 0.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  );
+                },
+              ),
+            );
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

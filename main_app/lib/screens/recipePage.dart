@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 
 class RecipePage extends StatelessWidget {
   final String recipeID;
+  final List<String>? detectedList;
 
-  const RecipePage({super.key, required this.recipeID});
+  const RecipePage({super.key, required this.recipeID, this.detectedList});
 
   @override
   Widget build(BuildContext context) {
@@ -116,8 +117,8 @@ class RecipePage extends StatelessWidget {
                   child: TabBarView(
                     children: [
                       IngredientsView(
-                        ingredients: recipe["ingredients"],
-                      ),
+                          ingredients: recipe["ingredients"],
+                          detectedList: detectedList),
                       PreparationView(instructions: recipe["instructions"]),
                       NutriInfoView(
                         calories: recipe["calories"],

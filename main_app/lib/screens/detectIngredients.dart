@@ -33,7 +33,7 @@ class _CameraPageState extends State<CameraPage> {
   bool _hasDetected = false;
 
   // Store all the classNames of the detected objects
-  List<String?> detectedObjectsList = [];
+  List<String> detectedObjectsList = [];
 
   @override
   void initState() {
@@ -79,6 +79,9 @@ class _CameraPageState extends State<CameraPage> {
 
     setState(() {
       _image = widget.selectedImage;
+      detectedObjectsList =
+          objDetect.map((obj) => obj!.className.toString().trim()).toList();
+      detectedObjectsList = detectedObjectsList.toSet().toList();
     });
   }
 
@@ -280,15 +283,14 @@ class _CameraPageState extends State<CameraPage> {
                                       _isLoading = false;
 
                                       detectedObjectsList = objDetect
-                                          .map((obj) => obj!.className)
+                                          .map((obj) =>
+                                              obj!.className.toString().trim())
                                           .toList();
 
                                       // Remove duplicates to the list by converting the list into a set,
                                       // Then converting back to list
                                       detectedObjectsList =
                                           detectedObjectsList.toSet().toList();
-
-                                      print(detectedObjectsList);
 
                                       if (detectedObjectsList.isNotEmpty) {
                                         _hasDetected = true;

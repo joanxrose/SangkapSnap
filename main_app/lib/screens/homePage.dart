@@ -62,7 +62,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
         body: SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 116, horizontal: 30)
+        padding: const EdgeInsets.symmetric(vertical: 96, horizontal: 30)
             .copyWith(bottom: 120),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -126,7 +126,7 @@ class HomePage extends StatelessWidget {
                           ),
                         );
                       } else if (snapshot.hasError) {
-                        return Text("Error: ${snapshot.error}");
+                        return Center(child: Text("Error: ${snapshot.error}"));
                       } else if (!snapshot.hasData) {
                         return const Center(
                           child: Text("No recipes available!"),

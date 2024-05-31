@@ -8,13 +8,15 @@ class CustomCard extends StatelessWidget {
   final String recipeName;
   final String imageUrl;
   final String calories;
+  final List<String>? detectedList;
 
   const CustomCard(
       {super.key,
       required this.recipeID,
       required this.recipeName,
       required this.imageUrl,
-      required this.calories});
+      required this.calories,
+      this.detectedList});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class CustomCard extends StatelessWidget {
               context,
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    RecipePage(recipeID: recipeID),
+                    RecipePage(recipeID: recipeID, detectedList: detectedList),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   return SlideTransition(

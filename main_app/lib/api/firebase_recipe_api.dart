@@ -39,7 +39,9 @@ class FirebaseRecipeAPI {
 
       // If recipe contains at least one of the ingredients in the list, add the recipe to the result list
       if (containsIngredient) {
-        recipes.add(doc.data() as Map<String, dynamic>);
+        Map<String, dynamic> foundRecipes = doc.data() as Map<String, dynamic>;
+        foundRecipes["recipe_id"] = doc.id;
+        recipes.add(foundRecipes);
       }
     }
 

@@ -19,9 +19,6 @@ class RecipeProvider with ChangeNotifier {
   // Getter for a specific recipe
   DocumentSnapshot get specificRecipe => _specificRecipe;
 
-  // Getter to get all the recipes that have specific ingredients
-  List<Map<String, dynamic>> get recipesByIngredients => _recipesByIngredients;
-
   // Fetch all recipes
   void fetchRecipes() {
     _recipesStream = firebaseService.fetchAllRecipes();
@@ -35,9 +32,11 @@ class RecipeProvider with ChangeNotifier {
   }
 
   // Fetch recipes based on a list of ingredients
-  Future<void> fetchRecipesByList(List<String> ingredientNames) async {
+  Future<List<Map<String, dynamic>>> fetchRecipesByList(
+      List<String> ingredientNames) async {
     _recipesByIngredients =
         await firebaseService.fetchRecipesByIngredients(ingredientNames);
-    notifyListeners();
+    return _recipesByIngredients;
+    // notifyListeners();
   }
 }

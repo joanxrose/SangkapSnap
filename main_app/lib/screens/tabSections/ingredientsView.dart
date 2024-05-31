@@ -2,59 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:main_app/themes/colorConstants.dart';
 
 class IngredientsView extends StatelessWidget {
-  const IngredientsView({super.key});
+  final List<dynamic> ingredients;
+
+  const IngredientsView({super.key, required this.ingredients});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: AppColors.mainWhite,
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 50, horizontal: 90),
-          child: Wrap(
-            direction: Axis.horizontal,
-            runSpacing: 16,
+      color: AppColors.mainWhite,
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 70),
+      child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: ingredients.length,
+        itemBuilder: (context, index) {
+          final ingredient = ingredients[index];
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "1kg",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Text(
-                    "Chicken",
-                    style: TextStyle(fontSize: 16),
-                  )
-                ],
+              Text(
+                ingredient["measurement"] ?? "",
+                style: const TextStyle(fontSize: 16),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "2 tbsp.",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Text(
-                    "Vinegar",
-                    style: TextStyle(fontSize: 16),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "2 tbsp.",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Text(
-                    "Vinegar",
-                    style: TextStyle(fontSize: 16),
-                  )
-                ],
+              Text(
+                ingredient["name"] ?? "",
+                style: const TextStyle(fontSize: 16),
               ),
             ],
-          ),
-        ));
+          );
+        },
+      ),
+    );
   }
 }

@@ -39,6 +39,9 @@ dependencies:
   image_picker: ^1.1.0
   permission_handler: ^11.3.1
   pytorch_lite: ^4.2.4
+  firebase_core: ^2.32.0
+  cloud_firestore: ^4.17.5
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

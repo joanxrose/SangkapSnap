@@ -4,7 +4,17 @@ import 'package:main_app/themes/colorConstants.dart';
 
 // TODO: Change image when image from the internet cannot be fetched
 class CustomCard extends StatelessWidget {
-  const CustomCard({super.key});
+  final String recipeID;
+  final String recipeName;
+  final String imageUrl;
+  final String calories;
+
+  const CustomCard(
+      {super.key,
+      required this.recipeID,
+      required this.recipeName,
+      required this.imageUrl,
+      required this.calories});
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +37,12 @@ class CustomCard extends StatelessWidget {
         color: AppColors.mainWhite,
         child: InkWell(
           onTap: () {
-            debugPrint("Clicked card!");
+            // debugPrint("Clicked card!");
             Navigator.push(
               context,
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    const RecipePage(),
+                    RecipePage(recipeID: recipeID),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   return SlideTransition(
@@ -53,11 +63,9 @@ class CustomCard extends StatelessWidget {
                 children: [
                   Container(
                     height: 180,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(
-                          "https://takestwoeggs.com/wp-content/uploads/2024/04/Filipino-Chicken-Adobo-adobong-manok-4-500x500.jpg",
-                        ),
+                        image: NetworkImage(imageUrl),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -71,31 +79,38 @@ class CustomCard extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 16)
                         .copyWith(bottom: 20),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Adobong Manok",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
+                      recipeName,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w800, fontSize: 20),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     Chip(
                         visualDensity:
-                            VisualDensity(horizontal: 0, vertical: -4),
-                        shape: RoundedRectangleBorder(
+                            const VisualDensity(horizontal: 0, vertical: -4),
+                        shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         side: BorderSide.none,
                         backgroundColor: AppColors.mainGreen,
-                        label: Text(
-                          "217 kcal",
-                          style: TextStyle(
-                              color: AppColors.mainWhite,
-                              fontWeight: FontWeight.w600),
-                        ))
+                        label: calories != ""
+                            ? Text(
+                                "$calories",
+                                style: const TextStyle(
+                                    color: AppColors.mainWhite,
+                                    fontWeight: FontWeight.w600),
+                              )
+                            : const Text(
+                                "No data available",
+                                style: TextStyle(
+                                    color: AppColors.mainWhite,
+                                    fontWeight: FontWeight.w600),
+                              ))
                   ],
                 ),
               )

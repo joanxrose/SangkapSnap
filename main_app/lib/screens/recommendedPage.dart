@@ -31,7 +31,7 @@ class RecommendedPage extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              CustomCard(),
+              /* CustomCard(),
               SizedBox(
                 height: 16,
               ),
@@ -39,7 +39,7 @@ class RecommendedPage extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              CustomCard(),
+              CustomCard(), */
             ],
           ),
         ),

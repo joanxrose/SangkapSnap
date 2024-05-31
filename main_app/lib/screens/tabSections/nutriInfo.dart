@@ -2,14 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:main_app/themes/colorConstants.dart';
 
 class NutriInfoView extends StatelessWidget {
-  const NutriInfoView({super.key});
+  final String calories;
+  final String carb;
+  final String fat;
+  final String protein;
+
+  const NutriInfoView(
+      {super.key,
+      required this.calories,
+      required this.carb,
+      required this.fat,
+      required this.protein});
 
   @override
   Widget build(BuildContext context) {
     return Container(
         color: AppColors.mainWhite,
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 50, horizontal: 90),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 90),
           child: Wrap(
             direction: Axis.horizontal,
             runSpacing: 16,
@@ -17,52 +27,52 @@ class NutriInfoView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Energy (kcal) ",
+                  const Text(
+                    "Energy ",
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
-                    "200",
-                    style: TextStyle(fontSize: 16),
+                    calories == "" ? "n/a" : calories,
+                    style: const TextStyle(fontSize: 16),
                   )
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Carb (g)",
+                  const Text(
+                    "Carbs",
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
-                    "3",
-                    style: TextStyle(fontSize: 16),
+                    carb == "" ? "n/a" : carb,
+                    style: const TextStyle(fontSize: 16),
                   )
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Protein (g)",
+                  const Text(
+                    "Protein",
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
-                    "9",
-                    style: TextStyle(fontSize: 16),
+                    protein == "" ? "n/a" : protein,
+                    style: const TextStyle(fontSize: 16),
                   )
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Fat (g)",
+                  const Text(
+                    "Fat",
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
-                    "25",
-                    style: TextStyle(fontSize: 16),
+                    fat == "" ? "n/a" : fat,
+                    style: const TextStyle(fontSize: 16),
                   )
                 ],
               ),

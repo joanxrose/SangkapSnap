@@ -33,7 +33,7 @@ class _CameraPageState extends State<CameraPage> {
   bool _hasDetected = false;
 
   // Store all the classNames of the detected objects
-  List<String?> detectedOjectsList = [];
+  List<String?> detectedObjectsList = [];
 
   @override
   void initState() {
@@ -140,7 +140,7 @@ class _CameraPageState extends State<CameraPage> {
                         )),
 
               // Display the list of detected ingredients / objects
-              detectedOjectsList.isEmpty
+              detectedObjectsList.isEmpty
                   ? const SizedBox(height: 5)
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,10 +164,10 @@ class _CameraPageState extends State<CameraPage> {
                               // scrollDirection: Axis.vertical,
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: detectedOjectsList.length,
+                              itemCount: detectedObjectsList.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return ListTile(
-                                  title: Text(detectedOjectsList[index]!),
+                                  title: Text(detectedObjectsList[index]!),
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -177,11 +177,12 @@ class _CameraPageState extends State<CameraPage> {
                                           color: AppColors.gray,
                                         ),
                                         onPressed: () {
-                                          detectedOjectsList.remove(
-                                              detectedOjectsList[index]);
+                                          detectedObjectsList.remove(
+                                              detectedObjectsList[index]);
+
                                           setState(() {
-                                            detectedOjectsList =
-                                                detectedOjectsList;
+                                            detectedObjectsList =
+                                                detectedObjectsList;
                                           });
                                         },
                                       ),
@@ -228,7 +229,7 @@ class _CameraPageState extends State<CameraPage> {
                             IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    detectedOjectsList
+                                    detectedObjectsList
                                         .add(ingredientController.text.trim());
                                   });
                                 },
@@ -260,7 +261,7 @@ class _CameraPageState extends State<CameraPage> {
                                       MaterialPageRoute(
                                           builder: (context) => RecommendedPage(
                                               detectedList:
-                                                  detectedOjectsList)),
+                                                  detectedObjectsList)),
                                     );
                                   },
                                   text: "Recommend Recipes",
@@ -278,11 +279,18 @@ class _CameraPageState extends State<CameraPage> {
                                     setState(() {
                                       _isLoading = false;
 
-                                      detectedOjectsList = objDetect
+                                      detectedObjectsList = objDetect
                                           .map((obj) => obj!.className)
                                           .toList();
 
-                                      if (detectedOjectsList.isNotEmpty) {
+                                      // Remove duplicates to the list by converting the list into a set,
+                                      // Then converting back to list
+                                      detectedObjectsList =
+                                          detectedObjectsList.toSet().toList();
+
+                                      print(detectedObjectsList);
+
+                                      if (detectedObjectsList.isNotEmpty) {
                                         _hasDetected = true;
                                       }
                                     });

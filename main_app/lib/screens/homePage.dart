@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:main_app/components/customCard.dart';
+import 'package:main_app/providers/recipe_provider.dart';
 import 'package:main_app/screens/searchPage.dart';
 import 'package:main_app/themes/colorConstants.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -111,18 +114,43 @@ class HomePage extends StatelessWidget {
               height: 36,
             ),
             availableText,
-            const SizedBox(
-              height: 24,
-            ),
-            const CustomCard(),
-            const SizedBox(
-              height: 16,
-            ),
-            const CustomCard(),
-            const SizedBox(
-              height: 16,
-            ),
-            const CustomCard(),
+            Consumer<RecipeProvider>(
+              builder: (context, provider, child) {
+                return StreamBuilder<QuerySnapshot>(
+                    stream: provider.recipesStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.mainGreen,
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text("Error: ${snapshot.error}");
+                      } else if (!snapshot.hasData) {
+                        return const Center(
+                          child: Text("No recipes available!"),
+                        );
+                      } else {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              var recipe = snapshot.data!.docs[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: CustomCard(
+                                    recipeID: recipe.id,
+                                    recipeName: recipe["recipe_name"],
+                                    imageUrl: recipe["image"],
+                                    calories: recipe["calories"]),
+                              );
+                            });
+                      }
+                    });
+              },
+            )
           ],
         ),
       ),

@@ -6,10 +6,38 @@ import 'package:main_app/screens/searchPage.dart';
 import 'package:main_app/themes/colorConstants.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
   static const routename = '/home';
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // For pagination scrolling
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(scrollListener);
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(scrollListener);
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollListener() {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 200) {
+      Provider.of<RecipeProvider>(context, listen: false).fetchMoreRecipes();
+    }
+  }
 
   // Header
   final header = RichText(
@@ -61,6 +89,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
+      controller: scrollController,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 96, horizontal: 30)
             .copyWith(bottom: 120),
@@ -116,41 +145,34 @@ class HomePage extends StatelessWidget {
             availableText,
             Consumer<RecipeProvider>(
               builder: (context, provider, child) {
-                return StreamBuilder<QuerySnapshot>(
-                    stream: provider.recipesStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.mainGreen,
-                          ),
+                return Column(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: provider.recipes.length,
+                      itemBuilder: (context, index) {
+                        var recipe = provider.recipes[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: CustomCard(
+                              recipeID: recipe.id,
+                              recipeName: recipe["recipe_name"],
+                              imageUrl: recipe["image"],
+                              calories: recipe["calories"]),
                         );
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text("Error: ${snapshot.error}"));
-                      } else if (!snapshot.hasData) {
-                        return const Center(
-                          child: Text("No recipes available!"),
-                        );
-                      } else {
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (context, index) {
-                              var recipe = snapshot.data!.docs[index];
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: CustomCard(
-                                    recipeID: recipe.id,
-                                    recipeName: recipe["recipe_name"],
-                                    imageUrl: recipe["image"],
-                                    calories: recipe["calories"]),
-                              );
-                            });
-                      }
-                    });
+                      },
+                    ),
+                    if (provider.isFetchingRecipes)
+                      const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.mainGreen,
+                        ),
+                      ),
+                  ],
+                );
               },
-            )
+            ),
           ],
         ),
       ),

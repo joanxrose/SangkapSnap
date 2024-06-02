@@ -5,8 +5,21 @@ class FirebaseRecipeAPI {
   static final FirebaseFirestore recipeDB = FirebaseFirestore.instance;
 
   // Fetch all recipes
-  Stream<QuerySnapshot> fetchAllRecipes() {
+  /* Stream<QuerySnapshot> fetchAllRecipes() {
     return recipeDB.collection("recipes").snapshots();
+  } */
+
+  // Fetch all recipes WITH pagination
+  Future<QuerySnapshot> fetchRecipesPagination(
+      {DocumentSnapshot? lastDoc, int limit = 5}) {
+    Query query =
+        recipeDB.collection("recipes").orderBy("recipe_name").limit(limit);
+
+    if (lastDoc != null) {
+      query = query.startAfterDocument(lastDoc);
+    }
+
+    return query.get();
   }
 
   // Fetch specific recipe

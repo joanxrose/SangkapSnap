@@ -16,6 +16,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController searchController = TextEditingController();
   List<Map<String, dynamic>> _searchResults = [];
+  List<String> selectedIngredients = [];
   bool _isSearching = false;
 
   void _performSearch(String query) async {
@@ -32,6 +33,9 @@ class _SearchPageState extends State<SearchPage> {
       return;
     }
 
+    // If query is an ingredient, toggle the specific ingredient chip
+    _toggleChip(query.toLowerCase());
+
     // Fetch recipes based on the query of the user
     RecipeProvider recipeProvider =
         Provider.of<RecipeProvider>(context, listen: false);
@@ -45,25 +49,72 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  // Fetch recipes based on the selected ingredient chips
+  void _fetchRecipesByList() async {
+    if (selectedIngredients.isEmpty) {
+      setState(() {
+        _searchResults = [];
+        _isSearching = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _isSearching = true;
+    });
+
+    RecipeProvider recipeProvider =
+        Provider.of<RecipeProvider>(context, listen: false);
+    List<Map<String, dynamic>> results =
+        await recipeProvider.fetchRecipesByList(selectedIngredients);
+
+    setState(() {
+      _searchResults = results;
+      _isSearching = false;
+    });
+  }
+
+  // Handle chip click
+  void _toggleChip(String ingredient) {
+    setState(() {
+      if (selectedIngredients.contains(ingredient)) {
+        selectedIngredients.remove(ingredient);
+      } else {
+        selectedIngredients.add(ingredient);
+      }
+    });
+
+    // Fetch the recipes based on the selected chip ingredients
+    _fetchRecipesByList();
+  }
+
+  // Check if ingredient is selected
+  bool _isChipSelected(String ingredient) {
+    return selectedIngredients.contains(ingredient);
+  }
+
   final searchText = const Text(
     "Search",
     style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
   );
 
-  // Ingredient Chip
-  final ingredientChip = const Chip(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20))),
-      side: BorderSide(color: AppColors.mainGreen),
-      backgroundColor: AppColors.mainWhite,
-      label: Text(
-        "Baboy",
-        style:
-            TextStyle(color: AppColors.mainGreen, fontWeight: FontWeight.w600),
-      ));
-
   @override
   Widget build(BuildContext context) {
+    // List of ingredient chips
+    final List<String> ingredientsList = [
+      "baboy",
+      "bangus",
+      "itlog",
+      "kamatis",
+      "kangkong",
+      "malunggay",
+      "monggo",
+      "okra",
+      "pechay",
+      "sayote",
+      "tokwa",
+    ];
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.mainWhite,
@@ -81,11 +132,10 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 TextField(
                   controller: searchController,
-                  autofocus: true,
                   style: const TextStyle(color: AppColors.gray),
                   cursorColor: AppColors.mainGreen,
                   decoration: InputDecoration(
-                    hintText: "Search recipes or ingredients",
+                    hintText: "Search a recipe or an ingredient",
                     border: OutlineInputBorder(
                       borderSide: const BorderSide(
                           color: AppColors.mainGreen, width: 1.5),
@@ -114,19 +164,29 @@ class _SearchPageState extends State<SearchPage> {
                   direction: Axis.horizontal,
                   runSpacing: 4,
                   spacing: 4,
-                  children: [
-                    ingredientChip,
-                    ingredientChip,
-                    ingredientChip,
-                    ingredientChip,
-                    ingredientChip,
-                    ingredientChip,
-                    ingredientChip,
-                    ingredientChip,
-                    ingredientChip,
-                    ingredientChip,
-                    ingredientChip,
-                  ],
+                  children: ingredientsList.map((ingredient) {
+                    return FilterChip(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      label: Text(
+                        ingredient,
+                        style: TextStyle(
+                          color: _isChipSelected(ingredient)
+                              ? AppColors.mainWhite
+                              : AppColors.mainGreen,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      side: const BorderSide(color: AppColors.mainGreen),
+                      selected: _isChipSelected(ingredient),
+                      backgroundColor: AppColors.mainWhite,
+                      selectedColor: AppColors.mainGreen,
+                      checkmarkColor: AppColors.mainWhite,
+                      onSelected: (isSelected) {
+                        _toggleChip(ingredient);
+                      },
+                    );
+                  }).toList(),
                 ),
                 const SizedBox(
                   height: 30,
@@ -143,6 +203,7 @@ class _SearchPageState extends State<SearchPage> {
                             recipeName: recipe["recipe_name"],
                             imageUrl: recipe["image"],
                             calories: recipe["calories"],
+                            detectedList: selectedIngredients,
                           );
                         }).toList(),
                       ),

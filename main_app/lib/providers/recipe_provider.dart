@@ -84,7 +84,6 @@ class RecipeProvider with ChangeNotifier {
     _recipesByIngredients =
         await firebaseService.fetchRecipesByIngredients(ingredientNames);
     return _recipesByIngredients;
-    // notifyListeners();
   }
 
   // Search

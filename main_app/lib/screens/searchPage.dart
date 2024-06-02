@@ -198,12 +198,15 @@ class _SearchPageState extends State<SearchPage> {
                       ))
                     : Column(
                         children: _searchResults.map((recipe) {
-                          return CustomCard(
-                            recipeID: recipe["recipe_id"],
-                            recipeName: recipe["recipe_name"],
-                            imageUrl: recipe["image"],
-                            calories: recipe["calories"],
-                            detectedList: selectedIngredients,
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: CustomCard(
+                              recipeID: recipe["recipe_id"],
+                              recipeName: recipe["recipe_name"],
+                              imageUrl: recipe["image"],
+                              calories: recipe["calories"],
+                              detectedList: selectedIngredients,
+                            ),
                           );
                         }).toList(),
                       ),

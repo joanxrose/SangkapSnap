@@ -86,4 +86,9 @@ class RecipeProvider with ChangeNotifier {
     return _recipesByIngredients;
     // notifyListeners();
   }
+
+  // Search
+  Future<List<Map<String, dynamic>>> searchRecipes(String query) async {
+    return await firebaseService.searchRecipes(query);
+  }
 }

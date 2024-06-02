@@ -70,4 +70,50 @@ class FirebaseRecipeAPI {
 
     return recipes;
   }
+
+  // Search (given a name of the recipe or the name of the ingredient)
+  Future<List<Map<String, dynamic>>> searchRecipes(String query) async {
+    Set<String> addedRecipeIds = Set<String>();
+    List<Map<String, dynamic>> recipes = [];
+
+    // Query all recipes
+    QuerySnapshot recipesSnapshot = await recipeDB.collection("recipes").get();
+
+    // Search for recipes
+    for (QueryDocumentSnapshot doc in recipesSnapshot.docs) {
+      Map<String, dynamic> recipeData = doc.data() as Map<String, dynamic>;
+      String recipeName = recipeData["recipe_name"].toString().toLowerCase();
+
+      // Check if the lowercase recipe name contains the lowercase search query
+      if (recipeName.contains(query.toLowerCase())) {
+        String recipeId = doc.id;
+        // Only add the recipe if the id hasn't been added before
+        if (!addedRecipeIds.contains(recipeId)) {
+          recipeData["recipe_id"] = recipeId;
+          recipes.add(recipeData);
+          addedRecipeIds.add(recipeId);
+        }
+      }
+
+      // Search for ingredients
+      List<dynamic> ingredients = recipeData["ingredients"];
+
+      for (Map<String, dynamic> ingredient in ingredients) {
+        if (ingredient["name"]
+            .toString()
+            .toLowerCase()
+            .contains(query.toLowerCase())) {
+          String recipeId = doc.id;
+          // Only add the recipe if the if hasn't been added before
+          if (!addedRecipeIds.contains(recipeId)) {
+            recipeData["recipe_id"] = recipeId;
+            recipes.add(recipeData);
+            addedRecipeIds.add(recipeId);
+          }
+        }
+      }
+    }
+
+    return recipes;
+  }
 }

@@ -26,24 +26,34 @@ class FirebaseRecipeAPI {
     for (QueryDocumentSnapshot doc in recipesSnapshot.docs) {
       List<dynamic> ingredients = doc["ingredients"];
 
-      // Check if the ingredients in the list is in the recipe's ingredients
-      bool containsIngredient = false;
-
+      // Count how many ingredients in the list are in the recipe
+      int matchCount = 0;
       for (Map<String, dynamic> ingredient in ingredients) {
         if (ingredientNames
             .contains(ingredient["name"].toString().toLowerCase())) {
-          containsIngredient = true;
-          break;
+          matchCount++;
         }
       }
 
-      // If recipe contains at least one of the ingredients in the list, add the recipe to the result list
-      if (containsIngredient) {
+      // If recipe contains at least one ingredient in the list, add the recipe
+      if (matchCount > 0) {
         Map<String, dynamic> foundRecipes = doc.data() as Map<String, dynamic>;
         foundRecipes["recipe_id"] = doc.id;
+
+        // Add how many ingredients matches to be able to sort recipes later
+        foundRecipes["match_count"] = matchCount;
         recipes.add(foundRecipes);
       }
     }
+
+    // Sort recipes based on the match count
+    recipes.sort((a, b) => b["match_count"].compareTo(a["match_count"]));
+
+    // Remove the match count to the final recipe list
+    recipes = recipes.map((recipe) {
+      recipe.remove("match_count");
+      return recipe;
+    }).toList();
 
     return recipes;
   }
